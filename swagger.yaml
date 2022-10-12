@@ -1,0 +1,81 @@
+openapi: 3.0.0
+info:
+  title: Сервис бронирования объектов OpenAPI specification
+  version: 0.0.1
+servers:
+  - url: http://localhost:8080/api/v1/
+    description: Dev server
+  - url: http://postman.com/api/v1/
+    description: Mock server
+paths:
+  /bookings:
+    get:
+      summary: Метод получения списка бронирований
+      tags:
+        - Bookings
+      operationId: getAllBookings
+      responses:
+        '200':
+          description: Successful respose with a list of bookings
+          content:
+            aplication/json:
+              schema: 
+                $ref: "#/components/schemas/Bookings"
+        'default':
+          description: Any other response
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+
+
+
+
+
+
+components:
+  schemas: 
+    Booking:
+      type: object
+      required:
+        - booking_id
+        - starttime
+        - period
+        - status
+        - created_at
+      properties:
+        booking_id:
+          type: string
+          example: 12335674
+        starttime:
+          type: string
+          description: ISO 8601
+          format: 2022-04-23T18:25:43.511Z
+        period:
+          type: string
+          description: ISO 8601
+          format: P2Y10M15DT10H20M30S
+        status:
+          type: string
+          enum:
+              - created
+              - cancelled
+          description: Status of booking
+        created_at:
+          type: string
+          format: 2022-04-23T18:25:43.511Z
+    Bookings:
+      type: array
+      items:
+        $ref: "#/components/schemas/Booking"
+    Error:
+      type: object
+      required:
+        - code
+        - message
+      properties:
+        code:
+          type: integer
+        message:
+          type: string
+
